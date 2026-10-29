@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Food Diary</title>
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="My Food Diary"><meta name="theme-color" content="#ffffff">
+<style>
+:root{--tx:#14171f;--mut:#5b6170;--bd:#e3e6ee;--blue:#dcecfb;--pink:#fde1e7;--yellow:#fff1bf;--violet:#e9e0fb;--green:#dcf3df;--acc:#1a5fd0;--err:#b3261e;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--tx);font:17px/1.4 -apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
+main{max-width:480px;margin:0 auto;padding:14px 16px 40px}
+button{font:inherit;color:inherit;cursor:pointer}
+header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+h1{font-size:34px;margin:0;letter-spacing:-1px;line-height:1.1}.subt{color:var(--mut);font-size:16px}
+h2{font-size:18px;margin:0 0 10px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 4px 14px rgba(25,35,70,.08)}
+.card.pink{background:var(--pink);border-color:#f6c9d3}.card.green{background:var(--green);border-color:#bfe3c4}
+.ib{width:48px;height:48px;border-radius:50%;border:1px solid var(--bd);background:#fff;box-shadow:0 3px 8px rgba(25,35,70,.1);font-size:20px;flex:none;padding:0}
+.ib.blue{background:var(--blue)}
+.srow{display:flex;gap:10px;align-items:center}
+.sf{flex:1;display:flex;align-items:center;gap:6px;background:#f4f6fa;border-radius:16px;padding:0 10px;min-height:50px;min-width:0}
+input,select{font:inherit;color:var(--tx);min-height:48px;border-radius:14px;border:1px solid var(--bd);background:#f4f6fa;padding:0 12px;width:100%}
+.sf input{border:0;background:none;padding:0}.sf button{border:0;background:none;font-size:18px;min-height:44px;min-width:36px}
+label{display:block;font-size:15px;font-weight:600;margin:10px 0 4px}
+.chk{display:flex;gap:10px;align-items:center;font-weight:500}.chk input{width:24px;min-height:24px}
+.msg{font-size:14px;color:var(--mut);margin:8px 0 0}.msg.e{color:var(--err)}
+#res button.r{display:block;width:100%;text-align:left;border:1px solid var(--bd);background:#fff;border-radius:14px;margin-top:8px;padding:10px 12px;min-height:48px}
+#res small{color:var(--mut);font-size:14px}
+.fr{display:flex;justify-content:space-between;align-items:center;gap:10px}.fn{font-size:22px;font-weight:700}.fb{color:var(--mut);font-size:15px}
+.stp{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.75);border-radius:20px;padding:8px}
+.stp input{flex:1;text-align:center;font-size:30px;font-weight:600;border:0;background:none;min-width:0;padding:0}.stp span{color:var(--mut);font-size:18px;margin-right:6px}
+.big{font-size:44px;font-weight:700;letter-spacing:-1px;line-height:1.1}
+.bdg{display:inline-block;font-size:13px;font-weight:600;padding:3px 10px;border-radius:99px;background:#fff7d6;border:1px solid #d9c36a;color:#4a3b00;margin-top:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.t{display:flex;gap:10px;align-items:center;border-radius:18px;padding:14px 10px;box-shadow:0 3px 10px rgba(25,35,70,.08)}
+.t.c{background:var(--blue)}.t.k{background:var(--pink)}.t.p{background:var(--yellow)}.t.f{background:var(--violet)}
+.ic{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+.tl{font-size:15px}.tv{font-size:26px;font-weight:700;letter-spacing:-.5px}.tv small{font-size:17px;font-weight:600}.na{font-size:14px;font-weight:600;color:var(--mut)}
+.lk{border:0;background:none;color:var(--acc);font-weight:600;min-height:44px;padding:0}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:flex-end;z-index:20}.sheet.on{display:flex}
+.sheet>div{background:#fff;width:100%;max-width:480px;margin:0 auto;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom,0px));max-height:90%;overflow:auto}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pri{width:100%;min-height:54px;margin-top:14px;border:0;border-radius:16px;background:var(--acc);color:#fff;font-weight:700}
+.sec{width:100%;min-height:48px;margin-top:6px;border:0;background:none;font-weight:600;color:var(--mut)}
+#cam video{width:100%;border-radius:16px;background:#000;margin-top:8px}
+.li{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bd);padding:6px 0}.li button{color:var(--err);border:0;background:none;font-weight:600;min-height:44px}
+.t.c{background:var(--blue);border:1px solid #bcd7f2}.t.k{background:var(--pink);border:1px solid #f4c3cf}.t.p{background:var(--yellow);border:1px solid #ecd98a}.t.f{background:var(--violet);border:1px solid #cfc1f0}
+.t,.card{box-shadow:0 4px 12px rgba(25,35,70,.10),inset 0 1px 0 rgba(255,255,255,.85)}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.diary-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.diary-controls .wide{grid-column:1/-1}
+.daymeal{border-top:1px solid var(--bd);padding:12px 0}.daymeal h3{font-size:16px;margin:0 0 6px}.entry{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid #eef0f5}.entry button{border:0;background:none;color:var(--err);min-height:36px}
+#printReport{display:none}
+@media print{body{font:12px/1.35 Arial,sans-serif;color:#111}body>*{display:none!important}#printReport{display:block!important;padding:0;margin:0}#printReport h1{font-size:22px;margin-bottom:4px}#printReport h2{font-size:16px;margin:14px 0 6px}#printReport table{width:100%;border-collapse:collapse;margin:6px 0 12px}#printReport th,#printReport td{border:1px solid #bbb;padding:5px;text-align:left}#printReport th{background:#f0f0f0}#printReport .totals{font-weight:bold;margin:6px 0 12px}.print-day{break-inside:avoid;margin-bottom:18px}.print-note{font-size:10px;color:#555}@page{margin:12mm}}
+
+#diary .row{align-items:end}#diarylist .li{align-items:flex-start}#diarylist small{display:block}
+#report{display:none}
+@media print{
+ @page{size:A4;margin:12mm}
+ body{font-size:11pt;color:#111} body>*{display:none!important} #report{display:block!important}
+ #report h1{font-size:22pt;text-align:center;margin-bottom:4px}#report .rsub{text-align:center;color:#444;margin-bottom:18px}
+ #report h2{font-size:14pt;margin:18px 0 6px;break-after:avoid}#report table{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:9.5pt}
+ #report th,#report td{border:1px solid #bbb;padding:5px;text-align:left}#report th{background:#f0f0f0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #report .tot{font-weight:bold;background:#f4f4f4}#report .day{break-before:page}#report .day:first-of-type{break-before:auto}
+}
+</style>
+</head>
+<body>
+<main>
+<header><div><h1>My Food Diary</h1><div class="subt">Calcolo nutrizionale e insulina</div></div><button class="ib" id="set" aria-label="Impostazioni e privacy">⚙︎</button></header>
+
+<section class="card" aria-label="Ricerca">
+<h2>Cerca un alimento</h2>
+<div class="srow"><div class="sf"><span aria-hidden="true">🔍</span><input id="q" type="search" placeholder="Es. nutella" aria-label="Cerca un alimento per nome" autocomplete="off"><button id="qx" aria-label="Cancella la ricerca" hidden>✕</button></div>
+<button class="ib" id="bcb" aria-label="Inserisci un codice a barre a mano">▥</button><button class="ib blue" id="scan" aria-label="Scansiona il codice a barre con la fotocamera">📷</button></div>
+<div id="bcrow" hidden><label for="bc">Codice a barre (EAN/UPC)</label><div class="srow"><input id="bc" inputmode="numeric" placeholder="8–14 cifre"><button class="ib" id="bcgo" aria-label="Cerca il codice a barre">🔍</button></div></div>
+<div id="cam" hidden><video id="vid" playsinline muted></video><button class="lk" id="scx">Chiudi la fotocamera</button></div>
+<p class="msg" id="msg" role="alert"></p>
+<div id="res"></div>
+</section>
+
+<section class="card" id="fc" aria-label="Alimento selezionato"></section>
+
+<section class="card" aria-label="Quantità"><h2>Quantità consumata</h2>
+<div class="stp"><button class="ib" id="gm" aria-label="Diminuisci la quantità">−</button><input id="g" inputmode="decimal" aria-label="Quantità consumata" placeholder="0"><span id="gu">g</span><button class="ib" id="gp" aria-label="Aumenta la quantità">+</button></div></section>
+
+<section class="card pink" id="rc" aria-label="Rapporto insulina/carboidrati">
+<div class="fr"><div><h2 style="margin:0">Rapporto insulina/carboidrati</h2><div class="fb">Da confermare con la dietista o il diabetologo</div></div><button class="ib" id="ri" aria-label="Informazioni sul rapporto" style="color:var(--acc)">ⓘ</button></div>
+<p class="msg" id="rinfo" hidden>Il rapporto indica quanti grammi di carboidrati corrispondono a 1 unità. Il valore iniziale di 10 g/U è solo un esempio provvisorio, non una prescrizione. Usa quello indicato dal tuo team diabetologico.</p>
+<div class="stp" style="margin-top:10px"><button class="ib" id="rm" aria-label="Diminuisci il rapporto">−</button><input id="r" inputmode="decimal" aria-label="Rapporto in grammi per unità"><span>g/U</span><button class="ib" id="rp" aria-label="Aumenta il rapporto">+</button></div>
+<label class="chk"><input type="checkbox" id="rcf"> Rapporto confermato dal mio team diabetologico</label>
+<button class="lk" id="rreset" hidden>Ripristina l’esempio provvisorio (10 g/U)</button></section>
+
+<section class="card green" id="ec" aria-label="Stima matematica" aria-live="polite">
+<h2 style="margin:0">Stima matematica per i carboidrati</h2><div class="big" id="ev">–</div><div id="eb"></div>
+<p class="msg" id="ex"></p><p class="msg">Stima matematica: non è una raccomandazione terapeutica né la dose da somministrare. Non include correzioni per glicemia, insulina attiva o altri fattori.</p></section>
+
+<div class="fr" style="margin:6px 2px 8px"><h2 style="margin:0" id="nh">Valori nutrizionali</h2><span class="fb" id="p100"></span></div>
+<div class="grid" id="nt"></div>
+<button class="pri" id="addm" style="margin-bottom:14px">+ Aggiungi al pasto</button>
+<section class="card" id="diary" aria-label="Diario alimentare">
+ <h2>Diario alimentare</h2>
+ <p class="msg">Registra gli alimenti nella giornata scelta. I dati vengono salvati in questo browser.</p>
+ <label for="dDate">Giorno</label><input id="dDate" type="date">
+ <label for="dMeal">Pasto</label><select id="dMeal"><option>Colazione</option><option>Spuntino mattutino</option><option>Pranzo</option><option>Spuntino pomeridiano</option><option>Cena</option><option>Altro spuntino</option></select>
+ <button class="pri" id="saveDiary">+ Salva alimento nel diario</button>
+ <div class="fr" style="margin-top:18px"><h2 style="margin:0">Giornata selezionata</h2><span class="fb" id="diaryDateLabel"></span></div>
+ <div id="diarylist"></div><div id="diarytot" class="msg" style="color:var(--tx)"></div>
+ <button class="lk" id="clearDay">Cancella tutti i pasti di questo giorno</button>
+ <h2 style="margin-top:20px">Esporta PDF</h2>
+ <label for="pdfFrom">Dal giorno</label><input id="pdfFrom" type="date">
+ <label for="pdfTo">Al giorno</label><input id="pdfTo" type="date">
+ <button class="pri" id="makePdf">Genera PDF / Stampa</button>
+ <p class="msg">Scegli lo stesso giorno per un PDF giornaliero oppure due date per un intervallo. Nella finestra di stampa scegli “Salva come PDF”.</p>
+</section>
+<div id="report" aria-label="Report PDF"></div>
+<section class="card" id="tmc" hidden aria-label="Totale del pasto" aria-live="polite">
+<h2>Totale del pasto</h2><div id="tml"></div><p class="msg" id="tmn" style="color:var(--tx)"></p>
+<div class="card green" id="tmt" style="margin:12px 0 0;box-shadow:none"><h2 style="margin:0">Totale stima matematica</h2><div class="big" id="tmv">–</div><div id="tmb"></div><p class="msg" id="tmx"></p>
+<p class="msg">Calcolo matematico dei soli carboidrati: non è una raccomandazione terapeutica né la dose da iniettare. Non include correzioni per glicemia, insulina attiva o altri fattori.</p></div>
+<button class="lk" id="tmclr">Svuota il pasto</button></section>
+<section class="card" id="diary" aria-label="Diario alimentare">
+<h2>Diario alimentare</h2>
+<p class="msg">Seleziona una data e registra gli alimenti nei pasti. Le registrazioni vengono salvate su questo dispositivo.</p>
+<div class="diary-controls">
+<div><label for="diaryDate">Giorno</label><input type="date" id="diaryDate"></div>
+<div><label for="mealType">Pasto</label><select id="mealType"><option>Colazione</option><option>Spuntino mattutino</option><option>Pranzo</option><option>Spuntino pomeridiano</option><option>Cena</option><option>Altro spuntino</option></select></div>
+<button class="pri wide" id="saveDiaryFood" style="margin-top:0">+ Registra alimento selezionato nel diario</button>
+</div>
+<div id="diaryDay" style="margin-top:12px"></div>
+<div class="card" style="margin:12px 0 0;box-shadow:none;background:#f8f9fc">
+<h2>Esporta il diario in PDF</h2>
+<div class="diary-controls">
+<div><label for="dateFrom">Dal giorno</label><input type="date" id="dateFrom"></div>
+<div><label for="dateTo">Al giorno</label><input type="date" id="dateTo"></div>
+<button class="pri wide" id="exportPdf" style="margin-top:0">Genera PDF / Stampa</button>
+</div>
+<p class="msg">Si aprirà la schermata di stampa del dispositivo: scegli “Salva su File” o “Salva come PDF”, se disponibile. Puoi esportare un solo giorno o un intervallo di date.</p>
+</div>
+</section>
+<p class="note msg" style="text-align:center;margin-top:16px">I dati restano su questo dispositivo. Dettagli nelle impostazioni.</p>
+</main>
+<div id="printReport"></div>
+
+<div class="sheet" id="msheet" role="dialog" aria-modal="true" aria-labelledby="mt"><div>
+<h2 id="mt">Inserisci i valori a mano</h2><p class="msg" id="mnote"></p>
+<label for="mn">Nome</label><input id="mn"><label for="mb">Marca (facoltativa)</label><input id="mb">
+<label for="mu">Unità dei valori</label><select id="mu"><option value="g">per 100 g</option><option value="ml">per 100 ml</option></select>
+<div class="row"><div><label for="mk">Calorie (kcal)</label><input id="mk" inputmode="decimal"></div><div><label for="mc">Carboidrati (g)</label><input id="mc" inputmode="decimal"></div>
+<div><label for="mp">Proteine (g)</label><input id="mp" inputmode="decimal"></div><div><label for="mf">Grassi (g)</label><input id="mf" inputmode="decimal"></div></div>
+<p class="msg">Lascia vuoto un valore se non lo conosci: non verrà inventato.</p>
+<label class="chk"><input type="checkbox" id="ms" checked> Salva nei miei alimenti</label>
+<p class="msg e" id="merr" role="alert"></p><button class="pri" id="mok">Usa questo alimento</button><button class="sec" id="mx">Annulla</button></div></div>
+
+<div class="sheet" id="prof" role="dialog" aria-modal="true" aria-labelledby="pt"><div>
+<h2 id="pt">Impostazioni e privacy</h2>
+<label class="chk"><input type="checkbox" id="sion"> Mostra il calcolo dell’insulina</label>
+<h2 style="margin-top:16px">I miei alimenti</h2><div id="flist"></div>
+<h2 style="margin-top:16px">Dove sono i tuoi dati</h2>
+<p class="msg" style="color:var(--tx)">Sul dispositivo (archivio del browser) restano: gli alimenti che salvi a mano, il tuo rapporto insulina/carboidrati e il diario alimentare giornaliero. Non vengono inviati a nessuno.<br><br>A Open Food Facts viene inviato solo il testo che cerchi o il codice a barre, come in ogni richiesta web (compreso l’indirizzo IP). Grammi e rapporto insulinico non vengono mai inviati.<br><br>Se il browser non ha un lettore di codici integrato, la scansione scarica una libreria da jsDelivr. Nessun account, nessuna chiave segreta nel codice.</p>
+<button class="sec" id="dgb" style="color:var(--acc)">Verifica la connessione a Open Food Facts</button><p class="msg" id="dg" style="color:var(--tx)"></p>
+<button class="sec" id="wipe" style="color:var(--err)">Cancella tutti i dati di questo dispositivo</button><button class="sec" id="pclose">Chiudi</button></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fu=n=>n.toLocaleString("it-IT",{maximumFractionDigits:2});
+const r1=(n,fix)=>n.toLocaleString("it-IT",{minimumFractionDigits:fix?1:0,maximumFractionDigits:1});
+const num=v=>{v=String(v).trim().replace(",",".");return v===""?NaN:Number(v)};
+const por=(v,g)=>v==null?null:v*g/100;
+const FK="mydiary.foods.v1",SK="mydiary.settings.v1";
+let foods=[],food=null,st={on:true,ratio:10,confirmed:false,example:true};
+try{foods=JSON.parse(localStorage.getItem(FK))||[]}catch(e){}
+try{st={...st,...JSON.parse(localStorage.getItem(SK))}}catch(e){}
+if(!(Number.isFinite(st.ratio)&&st.ratio>0)){st.ratio=10;st.confirmed=false;st.example=true}
+function save(){try{localStorage.setItem(FK,JSON.stringify(foods));localStorage.setItem(SK,JSON.stringify(st))}catch(e){$("msg").className="msg e";$("msg").textContent="Attenzione: non riesco a salvare i dati su questo dispositivo."}}
+const ratioOk=()=>Number.isFinite(st.ratio)&&st.ratio>0;
+let meal=[];
+const DK="mydiary.diary.v1";
+let diary={};try{diary=JSON.parse(localStorage.getItem(DK))||{}}catch(e){}
+const mealNames=["Colazione","Spuntino mattutino","Pranzo","Spuntino pomeridiano","Cena","Altro spuntino"];
+const todayISO=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
+function saveDiary(){try{localStorage.setItem(DK,JSON.stringify(diary))}catch(e){camMsg("Spazio di archiviazione insufficiente: esporta il diario e libera spazio.")}}
+const NT=[["c","Carboidrati","g","🌾"],["k","Calorie","kcal","🔥"],["p","Proteine","g","🐟"],["f","Grassi","g","💧"]];
+
+// Database locale indicativo per alimenti generici: valori medi per 100 g, variabili secondo prodotto e preparazione.
+const LOCAL=[
+ {name:"Pasta secca",k:353,c:72,p:12.5,f:1.5},{name:"Pasta cotta",k:158,c:30.9,p:5.8,f:0.9},
+ {name:"Riso bianco crudo",k:360,c:80,p:7,f:0.7},{name:"Riso bianco cotto",k:130,c:28.2,p:2.7,f:0.3},
+ {name:"Pane bianco",k:265,c:49,p:8.5,f:3.2},{name:"Pane integrale",k:247,c:41,p:13,f:4.2},
+ {name:"Patate crude",k:77,c:17,p:2,f:0.1},{name:"Patate bollite",k:87,c:20.1,p:1.9,f:0.1},
+ {name:"Mela",k:52,c:13.8,p:0.3,f:0.2},{name:"Banana",k:89,c:22.8,p:1.1,f:0.3},
+ {name:"Arancia",k:47,c:11.8,p:0.9,f:0.1},{name:"Pera",k:57,c:15.2,p:0.4,f:0.1},
+ {name:"Fragole",k:32,c:7.7,p:0.7,f:0.3},{name:"Uva",k:69,c:18.1,p:0.7,f:0.2},
+ {name:"Pomodoro",k:18,c:3.9,p:0.9,f:0.2},{name:"Zucchine",k:17,c:3.1,p:1.2,f:0.3},
+ {name:"Carote",k:41,c:9.6,p:0.9,f:0.2},{name:"Insalata lattuga",k:15,c:2.9,p:1.4,f:0.2},
+ {name:"Broccoli",k:34,c:6.6,p:2.8,f:0.4},{name:"Piselli cotti",k:84,c:15.6,p:5.4,f:0.2},
+ {name:"Fagioli cotti",k:127,c:22.8,p:8.7,f:0.5},{name:"Ceci cotti",k:164,c:27.4,p:8.9,f:2.6},
+ {name:"Lenticchie cotte",k:116,c:20.1,p:9,f:0.4},{name:"Petto di pollo cotto",k:165,c:0,p:31,f:3.6},
+ {name:"Tacchino cotto",k:135,c:0,p:29,f:1.6},{name:"Manzo magro cotto",k:217,c:0,p:26,f:12},
+ {name:"Salmone cotto",k:206,c:0,p:22.1,f:12.4},{name:"Merluzzo cotto",k:105,c:0,p:23,f:0.9},
+ {name:"Uovo intero",k:143,c:0.7,p:12.6,f:9.5},{name:"Tonno al naturale sgocciolato",k:116,c:0,p:25.5,f:0.8},
+ {name:"Latte intero",k:61,c:4.8,p:3.2,f:3.3},{name:"Latte parzialmente scremato",k:46,c:4.9,p:3.4,f:1.5},
+ {name:"Yogurt bianco intero",k:61,c:4.7,p:3.5,f:3.3},{name:"Yogurt greco naturale",k:97,c:3.9,p:9.0,f:5},
+ {name:"Parmigiano",k:402,c:0,p:32,f:30},{name:"Mozzarella",k:253,c:2,p:18.7,f:19.5},
+ {name:"Olio extravergine d'oliva",k:884,c:0,p:0,f:100},{name:"Mandorle",k:579,c:21.6,p:21.2,f:49.9},
+ {name:"Fiocchi d'avena",k:389,c:66.3,p:16.9,f:6.9},{name:"Corn flakes",k:357,c:84,p:7.5,f:0.4},
+ {name:"Zucchero",k:400,c:100,p:0,f:0},{name:"Miele",k:304,c:82.4,p:0.3,f:0}
+].map(x=>({...x,unit:"g",source:"database locale: valori medi indicativi"}));
+/* ---- schermata: alimento, valori e stima ---- */
+function showFood(){
+ if(!food){$("fc").innerHTML='<div class="fb">Nessun alimento selezionato. Cercane uno per nome o con il codice a barre.</div>';update();return}
+ const m=food.miss&&food.miss.length;
+ $("fc").innerHTML=`<div class="fr"><div><div class="fn">${esc(food.name)}</div>${food.brand?`<div class="fb">${esc(food.brand)}</div>`:""}<div class="fb">Valori nutrizionali per 100 ${food.unit}</div></div><button class="ib" id="fd" aria-expanded="false" aria-label="Mostra i valori per 100 ${food.unit}">›</button></div>
+ <div id="fdet" class="msg" style="color:var(--tx)" hidden>${NT.map(a=>a[1]+": "+(food[a[0]]==null?"non disponibile":r1(food[a[0]])+" "+a[2])).join(" · ")}</div>`
+ +(food.unitNote?`<p class="msg">${food.unitNote}</p>`:"")
+ +(m?`<p class="msg e" role="alert">Valori mancanti nel database: ${food.miss.join(", ")}. Mostro solo quelli disponibili.</p><button class="lk" id="fixm">Inserisci a mano i valori mancanti</button>`:"");
+ $("fd").onclick=()=>{const h=$("fdet");h.hidden=!h.hidden;$("fd").setAttribute("aria-expanded",!h.hidden)};
+ if($("fixm"))$("fixm").onclick=()=>openManual("Completa i valori mancanti dall’etichetta.",food);
+ update()}
+function update(){
+ const g=num($("g").value),f=food,ok=f&&g>0;
+ $("gu").textContent=f?f.unit:"g";
+ $("nh").textContent=ok?`Valori nutrizionali per ${fu(g)} ${f.unit}`:"Valori nutrizionali";
+ $("p100").textContent=f&&f.k!=null?`Per 100 ${f.unit}: ${r1(f.k)} kcal`:"";
+ $("nt").innerHTML=NT.map(([k,l,u,ic])=>{const miss=f&&f[k]==null;const v=ok&&!miss?r1(por(f[k],g),u==="g")+" <small>"+u+"</small>":miss?'<span class="na">non disponibile</span>':"– <small>"+u+"</small>";
+  return `<div class="t ${k}"><span class="ic" aria-hidden="true">${ic}</span><div><div class="tl">${l}</div><div class="tv">${v}</div></div></div>`}).join("");
+ $("rc").hidden=$("ec").hidden=!st.on;renderMeal();if(!st.on)return;
+ let val="–",ex="Seleziona un alimento per vedere la stima.",done=false;
+ if(f&&f.c==null)ex="Stima non disponibile: mancano i carboidrati di questo prodotto. Inseriscili a mano per calcolarla.";
+ else if(f&&!(g>0))ex="Inserisci la quantità consumata.";
+ else if(f&&!ratioOk())ex="Rapporto non valido: inserisci un numero maggiore di 0.";
+ else if(f){const c=f.c*g/100;val=fu(c/st.ratio)+" U";done=true;ex=`Calcolata sui carboidrati della quantità selezionata: ${fu(c)} g ÷ ${fu(st.ratio)} g/U. Valore non arrotondato a unità somministrabili.`}
+ $("ev").textContent=val;$("ex").textContent=ex;
+ $("eb").innerHTML=done&&!st.confirmed?'<span class="bdg">Stima provvisoria: rapporto non confermato'+(st.example?' (valore di esempio)':'')+'</span>':""}
+function renderMeal(){$("tmc").hidden=!meal.length;if(!meal.length)return;
+ const sum=k=>meal.reduce((a,i)=>a+(i[k]==null?0:i[k]*i.g/100),0),noC=meal.filter(i=>i.c==null),inc=meal.some(i=>["k","c","p","f"].some(k=>i[k]==null));
+ $("tml").innerHTML=meal.map(i=>`<div class="li"><div><b>${esc(i.name)}</b>${i.brand?" · "+esc(i.brand):""}<br><small class="fb">${fu(i.g)} ${i.unit} · ${i.c==null?"carboidrati non disponibili":fu(i.c*i.g/100)+" g di carboidrati"}${st.on&&ratioOk()&&i.c!=null?" · "+fu(i.c*i.g/100/st.ratio)+" U stimate":""}</small></div><button data-id="${i.id}" aria-label="Rimuovi ${esc(i.name)} dal pasto">Rimuovi</button></div>`).join("");
+ $("tml").querySelectorAll("button").forEach(b=>b.onclick=()=>{meal=meal.filter(i=>i.id!=b.dataset.id);renderMeal()});
+ $("tmn").textContent=`Totali: carboidrati ${r1(sum("c"),1)} g · calorie ${r1(sum("k"))} kcal · proteine ${r1(sum("p"),1)} g · grassi ${r1(sum("f"),1)} g.`+(inc?" Alcuni valori non disponibili non sono inclusi nei totali.":"");
+ $("tmt").hidden=!st.on;if(!st.on)return;
+ let v="–",x="Rapporto non valido: inserisci un numero maggiore di 0.",d=false;
+ if(ratioOk()){const c=sum("c");v=fu(c/st.ratio)+" U";d=true;x=`Calcolata sui carboidrati totali del pasto: ${fu(c)} g ÷ ${fu(st.ratio)} g/U. Valore non arrotondato a unità somministrabili.`+(noC.length?` Totale incompleto: carboidrati non disponibili per ${noC.length} alimento/i, non inclusi.`:"")}
+ $("tmv").textContent=v;$("tmx").textContent=x;$("tmb").innerHTML=d&&!st.confirmed?'<span class="bdg">Stima provvisoria: rapporto non confermato'+(st.example?' (valore di esempio)':'')+'</span>':""}
+function nutrientTotals(items){const sum=k=>items.reduce((a,i)=>a+(i[k]==null?0:i[k]*i.g/100),0);return {c:sum("c"),k:sum("k"),p:sum("p"),f:sum("f")}}
+function dayItems(date){return diary[date]||{}}
+function renderDiaryDay(){const date=$("diaryDate").value||todayISO(),data=dayItems(date),root=$("diaryDay");
+ const sections=mealNames.map(name=>{const items=data[name]||[];if(!items.length)return `<div class="daymeal"><h3>${esc(name)}</h3><p class="msg">Nessun alimento registrato.</p></div>`;
+ const t=nutrientTotals(items);return `<div class="daymeal"><h3>${esc(name)}</h3>${items.map(i=>`<div class="entry"><div><b>${esc(i.name)}</b>${i.brand?" · "+esc(i.brand):""}<br><small class="fb">${fu(i.g)} ${esc(i.unit||"g")} · C ${i.c==null?"—":fu(i.c*i.g/100)+" g"} · ${i.k==null?"—":fu(i.k*i.g/100)+" kcal"} · P ${i.p==null?"—":fu(i.p*i.g/100)+" g"} · G ${i.f==null?"—":fu(i.f*i.g/100)+" g"}</small></div><button data-meal="${esc(name)}" data-id="${i.id}">Rimuovi</button></div>`).join("")}<p class="msg">Totale: carboidrati ${fu(t.c)} g · ${fu(t.k)} kcal · proteine ${fu(t.p)} g · grassi ${fu(t.f)} g${items.some(i=>["c","k","p","f"].some(k=>i[k]==null))?" (valori mancanti esclusi)":""}</p></div>`}).join("");
+ const all=mealNames.flatMap(n=>data[n]||[]),t=nutrientTotals(all);root.innerHTML=sections+`<div class="card" style="margin:8px 0 0;background:#f8f9fc;box-shadow:none"><b>Totale giornata</b><p class="msg" style="color:var(--tx)">Carboidrati ${fu(t.c)} g · Calorie ${fu(t.k)} kcal · Proteine ${fu(t.p)} g · Grassi ${fu(t.f)} g${all.some(i=>["c","k","p","f"].some(k=>i[k]==null))?". Alcuni valori mancanti sono esclusi.":"."}</p></div>`;
+ root.querySelectorAll("button[data-meal]").forEach(b=>b.onclick=()=>{const list=dayItems(date)[b.dataset.meal]||[];diary[date][b.dataset.meal]=list.filter(i=>String(i.id)!==b.dataset.id);if(!diary[date][b.dataset.meal].length)delete diary[date][b.dataset.meal];if(!Object.keys(diary[date]).length)delete diary[date];saveDiary();renderDiaryDay()})}
+function recordDiaryFood(){const g=num($("g").value);if(!food)return camMsg("Seleziona prima un alimento.");if(!(g>0))return camMsg("Inserisci la quantità consumata.");const date=$("diaryDate").value||todayISO(),name=$("mealType").value;
+ if(!diary[date])diary[date]={};if(!diary[date][name])diary[date][name]=[];diary[date][name].push({id:Date.now(),name:food.name,brand:food.brand||"",unit:food.unit||"g",g,k:food.k,c:food.c,p:food.p,f:food.f});saveDiary();renderDiaryDay();$("msg").className="msg";$("msg").textContent="Alimento registrato nel diario del "+date+"."}
+$("saveDiaryFood").onclick=recordDiaryFood;
+$("diaryDate").addEventListener("change",renderDiaryDay);
+function dateLabel(s){const d=new Date(s+"T12:00:00");return d.toLocaleDateString("it-IT",{day:"2-digit",month:"2-digit",year:"numeric",weekday:"long"})}
+function generatePrintReport(){let from=$("dateFrom").value||$("diaryDate").value||todayISO(),to=$("dateTo").value||from;if(from>to){camMsg("La data iniziale non può essere successiva alla data finale.");return}
+ const dates=Object.keys(diary).filter(d=>d>=from&&d<=to).sort();if(!dates.length){camMsg("Nessun pasto registrato nell’intervallo selezionato.");return}
+ let html=`<h1>My Food Diary</h1><p>Diario alimentare dal ${esc(dateLabel(from))} al ${esc(dateLabel(to))}</p>`;
+ for(const date of dates){const data=diary[date],all=mealNames.flatMap(n=>data[n]||[]);if(!all.length)continue;const total=nutrientTotals(all);html+=`<section class="print-day"><h2>${esc(dateLabel(date))}</h2>`;
+ for(const name of mealNames){const items=data[name]||[];if(!items.length)continue;const t=nutrientTotals(items);html+=`<h2>${esc(name)}</h2><table><thead><tr><th>Alimento</th><th>Quantità</th><th>Carboidrati (g)</th><th>Calorie (kcal)</th><th>Proteine (g)</th><th>Grassi (g)</th></tr></thead><tbody>`+items.map(i=>`<tr><td>${esc(i.name)}${i.brand?" · "+esc(i.brand):""}</td><td>${fu(i.g)} ${esc(i.unit||"g")}</td><td>${i.c==null?"—":fu(i.c*i.g/100)}</td><td>${i.k==null?"—":fu(i.k*i.g/100)}</td><td>${i.p==null?"—":fu(i.p*i.g/100)}</td><td>${i.f==null?"—":fu(i.f*i.g/100)}</td></tr>`).join("")+`<tr><th>Totale ${esc(name)}</th><th>—</th><th>${fu(t.c)}</th><th>${fu(t.k)}</th><th>${fu(t.p)}</th><th>${fu(t.f)}</th></tr></tbody></table>`}
+ html+=`<p class="totals">Totale giornata: carboidrati ${fu(total.c)} g · calorie ${fu(total.k)} kcal · proteine ${fu(total.p)} g · grassi ${fu(total.f)} g${all.some(i=>["c","k","p","f"].some(k=>i[k]==null))?" (valori mancanti esclusi)":""}</p></section>`}
+ html+='<p class="print-note">Documento riepilogativo dei dati registrati dall’utente. I valori nutrizionali dipendono dalla completezza e accuratezza delle informazioni degli alimenti selezionati o inseriti manualmente.</p>';
+ $("printReport").innerHTML=html;window.print()}
+$("exportPdf").onclick=generatePrintReport;
+$("addm").onclick=()=>{const g=num($("g").value);if(!food)return camMsg("Seleziona prima un alimento.");if(!(g>0))return camMsg("Inserisci la quantità consumata.");
+ $("msg").textContent="";meal.push({id:Date.now(),name:food.name,brand:food.brand||"",unit:food.unit,g,k:food.k,c:food.c,p:food.p,f:food.f});renderMeal();recordDiaryFood()};
+$("tmclr").onclick=()=>{meal=[];renderMeal()};
+function setRatio(v){st.ratio=v>0&&v<=500?v:NaN;st.confirmed=false;st.example=false;$("rcf").checked=false;save();update()}
+function fillSet(){$("rreset").hidden=!!st.example&&ratioOk();$("r").value=ratioOk()?String(st.ratio).replace(".",","):"";$("rcf").checked=!!st.confirmed&&ratioOk();$("sion").checked=st.on}
+$("g").addEventListener("input",update);
+const step=(id,d,min)=>{const v=num($(id).value);return Math.max(min,Math.round(((v>0?v:0)+d)*100)/100)};
+$("gm").onclick=()=>{$("g").value=String(step("g",-10,0)).replace(".",",");update()};
+$("gp").onclick=()=>{$("g").value=String(step("g",10,0)).replace(".",",");update()};
+$("rm").onclick=()=>{const v=ratioOk()?st.ratio:10;setRatio(Math.max(1,v-1));fillSet()};
+$("rp").onclick=()=>{const v=ratioOk()?st.ratio:10;setRatio(Math.min(500,v+1));fillSet()};
+$("r").addEventListener("input",()=>setRatio(num($("r").value)));
+$("rcf").onchange=()=>{st.confirmed=$("rcf").checked&&ratioOk();save();update()};
+$("rreset").onclick=()=>{if(confirm("Sostituire il rapporto salvato con l’esempio provvisorio di 10 g/U?")){st.ratio=10;st.confirmed=false;st.example=true;save();fillSet();update()}};
+$("ri").onclick=()=>{$("rinfo").hidden=!$("rinfo").hidden};
+
+/* ---- Open Food Facts (ricerca: Search-a-licious; prodotto: API v2) ---- */
+const OFF="https://world.openfoodfacts.org",SAL="https://search.openfoodfacts.org";
+async function jget(url,ms=10000){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);
+ try{const r=await fetch(url,{signal:c.signal,headers:{Accept:"application/json"}});
+  if(r.status===404)return{status:0};if(!r.ok)throw new Error("http"+r.status);
+  try{return await r.json()}catch(e){throw new Error("json")}}finally{clearTimeout(t)}}
+let inPrev=false;try{inPrev=window.self!==window.top||/claude/i.test(location.hostname)}catch(e){inPrev=true}
+const errCode=e=>e&&e.message==="json"?"risposta non valida":e&&e.name==="AbortError"?"tempo scaduto":e&&/^http/.test(e.message)?"errore HTTP "+e.message.slice(4):"richiesta bloccata o senza rete";
+const errTxt=e=>e&&e.message==="json"?"Risposta non valida dal database. Riprova più tardi o inserisci i valori a mano.":e&&e.name==="AbortError"?"Il database non risponde (tempo scaduto). Riprova o inserisci i valori a mano.":e&&/^http/.test(e.message)?"Il database ha restituito un errore ("+e.message.slice(4)+"). Riprova più tardi.":(inPrev?"Questa pagina è aperta nell’anteprima di Claude, che blocca le richieste verso altri siti: la ricerca online funziona solo aprendo l’app dal tuo indirizzo https. Intanto puoi inserire i valori a mano.":"Connessione assente o ricerca online non disponibile. Puoi usare i tuoi alimenti salvati o inserire i valori a mano.");
+function parseNut(n){n=n||{};const g=k=>{const v=typeof n[k]==="string"?parseFloat(n[k]):n[k];return Number.isFinite(v)&&v>=0?v:null};
+ let k=g("energy-kcal_100g"),conv=false;if(k===null){const kj=g("energy-kj_100g")??g("energy_100g");if(kj!==null){k=Math.round(kj/4.184);conv=true}}
+ return{k,c:g("carbohydrates_100g"),p:g("proteins_100g"),f:g("fat_100g"),conv}}
+const txt=v=>typeof v==="string"?v:Array.isArray(v)?v.join(", "):v&&typeof v==="object"?(v.it||v.en||v.main||Object.values(v)[0]||""):"";
+const brandOf=p=>txt(p.brands).split(",")[0].trim();
+const nameOf=p=>txt(p.product_name).trim();
+function unitOf(p){const q=txt(p.quantity).toLowerCase();if(/\b\d+([.,]\d+)?\s*(ml|cl|l)\b/.test(q)||/\b(ml|cl)\b/.test(q))return{unit:"ml"};
+ if(/\b\d+([.,]\d+)?\s*(g|kg)\b/.test(q))return{unit:"g"};
+ return{unit:"g",note:"Il database non indica se i valori sono per 100 g o 100 ml: controlla l’unità sulla confezione."}}
+async function searchOnline(q){
+ const e=encodeURIComponent(q),fl="code,product_name,brands,countries_tags,nutriments,quantity";
+ // La ricerca testuale libera è supportata dall'endpoint classico; l'API v2 è per filtri strutturati.
+ const d=await jget(OFF+"/cgi/search.pl?search_terms="+e+"&search_simple=1&action=process&json=1&page_size=15&fields="+fl,15000);
+ if(!d||!Array.isArray(d.products))throw new Error("json");
+ return d.products.filter(h=>h&&h.code&&nameOf(h)).map(h=>({code:String(h.code),name:nameOf(h),brand:brandOf(h),nv:h.nutriments&&typeof h.nutriments==="object"?parseNut(h.nutriments):null,it:Array.isArray(h.countries_tags)&&h.countries_tags.includes("en:italy")})).sort((a,b)=>b.it-a.it)
+}
+function sel(x){food={unit:"g",...x};$("g").value=$("g").value||"";showFood();$("res").innerHTML="";$("q").value="";$("qx").hidden=true;$("g").focus()}
+const nvLine=nv=>nv?[["k","kcal"],["c","g carb"],["p","g prot"],["f","g grassi"]].map(([k,u])=>nv[k]==null?"":r1(nv[k])+" "+u).filter(Boolean).join(" · "):"";
+let seq=0;
+function showRes(){
+ const q=$("q").value.trim(),ql=q.toLowerCase();
+ $("qx").hidden=!q;seq++;
+ if(!q){$("res").innerHTML="";return}
+ const m=foods.filter(x=>x.name.toLowerCase().includes(ql)||(x.brand||"").toLowerCase().includes(ql)).slice(0,6);
+ const lm=LOCAL.filter(x=>x.name.toLowerCase().includes(ql)).slice(0,10);
+ $("res").innerHTML=m.map((x,i)=>`<button class="r" data-i="${i}"><b>${esc(x.name)}</b>${x.brand?" · "+esc(x.brand):""} <small>(salvato)</small><br><small>Per 100 ${x.unit||"g"}: ${nvLine(x)||"valori non disponibili"}</small></button>`).join("")+lm.map((x,i)=>`<button class="r" data-local="${i}"><b>${esc(x.name)}</b> <small>(alimento comune · valori medi)</small><br><small>Per 100 g: ${nvLine(x)}</small></button>`).join("")+
+ (q.length>=3?`<button class="lk" id="onlineSearch">Cerca “${esc(q)}” online su Open Food Facts</button><p class="msg">La ricerca online parte quando tocchi il pulsante o premi Invio.</p>`:"")+
+ '<button class="lk" id="mbtn">Non lo trovi? Inserisci i valori per 100 g a mano</button>';
+ $("res").querySelectorAll("button[data-i]").forEach(b=>b.onclick=()=>sel(m[b.dataset.i]));
+ $("res").querySelectorAll("button[data-local]").forEach(b=>b.onclick=()=>sel(lm[b.dataset.local]));
+ $("mbtn").onclick=()=>openManual("",{name:q});
+ if($("onlineSearch"))$("onlineSearch").onclick=()=>searchOnlineAndRender(q);
+}
+async function searchOnlineAndRender(q){
+ const my=++seq,root=$("res"),needle=q.trim();
+ if(needle.length<3)return;
+ let holder=$("onlineResults");
+ if(!holder){holder=document.createElement("div");holder.id="onlineResults";root.appendChild(holder)}
+ holder.innerHTML='<p class="msg">Cerco su Open Food Facts…</p>';
+ try{
+  const h=await searchOnline(needle);
+  if(my!==seq||$("q").value.trim()!==needle)return;
+  holder.innerHTML=h.length?'<p class="msg">Risultati da Open Food Facts (prima i prodotti italiani)</p>'+h.map(x=>`<button class="r" data-c="${esc(x.code)}"><b>${esc(x.name)}</b>${x.brand?" · "+esc(x.brand):""}${x.it?" 🇮🇹":""}<br><small>${nvLine(x.nv)?"Per 100 g/ml: "+nvLine(x.nv):"Valori mostrati dopo la selezione"}</small></button>`).join(""):'<p class="msg">Nessun prodotto trovato online. Puoi inserire i valori a mano.</p>';
+  holder.querySelectorAll("button[data-c]").forEach(b=>b.onclick=()=>loadCode(b.dataset.c));
+ }catch(e){
+  if(my===seq)holder.innerHTML=`<p class="msg e" role="alert">${esc(errTxt(e))}</p><button class="lk" id="retryOnline">Riprova la ricerca</button>`;
+  if($("retryOnline"))$("retryOnline").onclick=()=>searchOnlineAndRender(needle);
+ }
+}
+$("q").addEventListener("input",showRes);
+$("q").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();searchOnlineAndRender($("q").value)}});
+$("qx").onclick=()=>{$("q").value="";showRes();$("q").focus()};
+async function loadCode(code){code=String(code).replace(/\D/g,"");seq++;$("msg").className="msg";
+ if(code.length<8||code.length>14){$("msg").className="msg e";$("msg").textContent="Il codice a barre deve avere da 8 a 14 cifre.";return}
+ $("msg").textContent="";const lf=foods.find(x=>x.code===code);if(lf){sel(lf);$("msg").textContent="Prodotto preso dai tuoi alimenti salvati.";return}
+ $("msg").textContent="Cerco il prodotto…";let d;
+ try{d=await jget(OFF+"/api/v2/product/"+code+".json?fields=code,product_name,brands,quantity,nutriments")}catch(e){$("msg").textContent="";return openManual(errTxt(e),{code})}
+ if(!d||typeof d!=="object"){$("msg").textContent="";return openManual("Risposta non valida dal database. Inserisci i valori a mano.",{code})}
+ if(d.status===0||!d.product){$("msg").textContent="";return openManual("Prodotto non trovato nel database (codice "+code+"). Inserisci i valori per 100 g dall’etichetta: lo salverò nei tuoi alimenti.",{code})}
+ const P=d.product,nv=parseNut(P.nutriments),u=unitOf(P);
+ const miss=[["calorie",nv.k],["carboidrati",nv.c],["proteine",nv.p],["grassi",nv.f]].filter(a=>a[1]===null).map(a=>a[0]);
+ $("msg").textContent="";
+ sel({name:nameOf(P)||"Prodotto "+code,brand:brandOf(P),k:nv.k,c:nv.c,p:nv.p,f:nv.f,code,unit:u.unit,miss,unitNote:[u.unit==="ml"?"Valori per 100 ml: la quantità è in ml, non converto ml in g.":"",u.note||"",nv.conv?"Calorie convertite da kJ.":""].filter(Boolean).join(" ")})}
+$("bcb").onclick=()=>{$("bcrow").hidden=!$("bcrow").hidden;if(!$("bcrow").hidden)$("bc").focus()};
+$("bcgo").onclick=()=>loadCode($("bc").value);$("bc").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();loadCode($("bc").value)}});
+
+/* ---- scansione con fotocamera ---- */
+let stream=null,scanOn=false,rd=null;
+function stopScan(){scanOn=false;if(rd){try{rd.reset()}catch(e){}rd=null}if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$("cam").hidden=true}
+const camMsg=m=>{$("msg").className="msg e";$("msg").textContent=m};
+function loadZX(){return window.ZXing?Promise.resolve():new Promise((ok,ko)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js";s.onload=ok;s.onerror=ko;document.head.appendChild(s)})}
+async function startScan(){$("msg").textContent="";$("msg").className="msg";
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){camMsg("La fotocamera non è disponibile in questa pagina o browser. Inserisci il codice a mano (pulsante ▥).");$("bcrow").hidden=false;return}
+ try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false})}
+ catch(e){camMsg(e&&e.name==="NotAllowedError"?"Permesso per la fotocamera negato. Puoi consentirlo nelle impostazioni di Safari oppure inserire il codice a mano.":"Impossibile usare la fotocamera. Inserisci il codice a mano.");$("bcrow").hidden=false;return}
+ const v=$("vid");v.srcObject=stream;$("cam").hidden=false;try{await v.play()}catch(e){}scanOn=true;
+ const found=c=>{if(!scanOn)return;stopScan();$("bc").value=c;loadCode(c)};
+ if("BarcodeDetector" in window){let det;try{det=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e"]})}catch(e){}
+  if(det){const tick=async()=>{if(!scanOn)return;try{const r=await det.detect(v);if(r[0]){found(r[0].rawValue);return}}catch(e){}setTimeout(tick,250)};tick();return}}
+ try{await loadZX();rd=new ZXing.BrowserMultiFormatReader();rd.decodeFromVideoElementContinuously(v,r=>{if(r)found(r.getText())})}
+ catch(e){stopScan();camMsg("Lettore di codici non caricato (serve la connessione). Inserisci il codice a mano.");$("bcrow").hidden=false}}
+$("scan").onclick=startScan;$("scx").onclick=stopScan;
+
+/* ---- inserimento manuale e alimenti salvati ---- */
+const MF=["mn","mb","mk","mc","mp","mf"];let mcode=null;
+function openManual(msg,x){x=x||{};mcode=x.code||null;$("mnote").textContent=msg||"";$("merr").textContent="";
+ [x.name||"",x.brand||"",x.k??"",x.c??"",x.p??"",x.f??""].forEach((v,i)=>$(MF[i]).value=v);$("mu").value=x.unit||"g";$("ms").checked=true;$("msheet").classList.add("on");$("mn").focus()}
+$("mx").onclick=()=>$("msheet").classList.remove("on");
+$("mok").onclick=()=>{const n=$("mn").value.trim(),v=["mk","mc","mp","mf"].map(i=>num($(i).value));
+ if(!n){$("merr").textContent="Inserisci il nome dell’alimento.";return}
+ if(v.some(x=>!isNaN(x)&&x<0)){$("merr").textContent="I valori non possono essere negativi.";return}
+ const [k,c,p,f]=v.map(x=>isNaN(x)?null:x);
+ if((c||0)+(p||0)+(f||0)>100.5||(k||0)>900){$("merr").textContent="Valori per 100 g non possibili: controlla calorie e macronutrienti.";return}
+ const x={name:n,brand:$("mb").value.trim(),k,c,p,f,unit:$("mu").value,code:mcode||undefined};
+ const miss=[["calorie",k],["carboidrati",c],["proteine",p],["grassi",f]].filter(a=>a[1]===null).map(a=>a[0]);
+ if($("ms").checked){const j=foods.findIndex(y=>y.name.toLowerCase()===n.toLowerCase()&&(y.brand||"")===x.brand);if(j>=0)foods[j]=x;else foods.push(x);save()}
+ $("msheet").classList.remove("on");sel({...x,miss})};
+function fillFoods(){$("flist").innerHTML=foods.length?foods.map((x,i)=>`<div class="li"><span>${esc(x.name)}${x.brand?" · "+esc(x.brand):""}</span><button data-i="${i}" aria-label="Elimina ${esc(x.name)}">Elimina</button></div>`).join(""):'<p class="msg">Nessun alimento salvato.</p>';
+ $("flist").querySelectorAll("button").forEach(b=>b.onclick=()=>{foods.splice(b.dataset.i,1);save();fillFoods()})}
+$("set").onclick=()=>{fillSet();fillFoods();$("prof").classList.add("on")};
+$("dgb").onclick=async()=>{const o=$("dg");o.textContent="Verifico…";let a,b;
+ try{await jget(OFF+"/api/v2/product/3017620422003.json?fields=product_name");a="Prodotto per codice: raggiungibile"}catch(e){a="Prodotto per codice: "+errCode(e)}
+ try{const d=await jget(OFF+"/cgi/search.pl?search_terms=nutella&search_simple=1&action=process&json=1&page_size=1&fields=code,product_name");b="Ricerca per nome (ricerca testuale): "+(d&&Array.isArray(d.products)?"raggiungibile":"risposta inattesa")}catch(e){b="Ricerca per nome (ricerca testuale): "+errCode(e)}
+ o.innerHTML=[inPrev?"Pagina aperta nell’anteprima di Claude: le richieste esterne sono bloccate (limite dell’anteprima, non dell’app).":"Pagina aperta da "+location.host+".",a,b].map(esc).join("<br>")};
+$("pclose").onclick=()=>$("prof").classList.remove("on");
+$("sion").onchange=()=>{st.on=$("sion").checked;save();update()};
+$("wipe").onclick=()=>{if(confirm("Cancellare alimenti salvati e impostazioni di questo dispositivo?")){foods=[];food=null;meal=[];diary={};try{localStorage.removeItem(DK)}catch(e){}st={on:true,ratio:10,confirmed:false,example:true};$("g").value="";save();fillSet();fillFoods();showFood();$("prof").classList.remove("on")}};
+const initialDay=todayISO();$("diaryDate").value=initialDay;$("dateFrom").value=initialDay;$("dateTo").value=initialDay;renderDiaryDay();
+fillSet();showFood();
+</script>
+</body>
+</html>
